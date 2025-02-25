@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users Table</title>
+</head>
+<body>
+<h1>Users Table</h1>
+<h2>Users</h2>
+<form th:action="@{/add}" method="post">
+    <label for="firstName">Name:</label>
+    <input type="text" id="firstName" name="firstName" required><br>
+    <label for="lastName">LastName</label>
+    <input type="text" id="lastName" name="lastName" required><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+
+    <button type="submit">Add</button>
+</form>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>LastName</th>
+        <th>Email</th>
+        <th>action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:utext="${user.getId()}">ID</td>
+        <td th:utext="${user.getFirstName()}">Name</td>
+        <td th:utext="${user.getLastName()}">LastName</td>
+        <td th:utext="${user.getEmail()}">Email</td>
+        <td>
+            <form th:action="@{/delete/{id}(id=${user.id})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+            <form th:action="@{/edit/{id}(id=${user.id})}" method="get" style="display:inline;">
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
