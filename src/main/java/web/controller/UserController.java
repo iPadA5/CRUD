@@ -1,4 +1,5 @@
 package web.controller;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,11 +8,12 @@ import web.model.User;
 import web.service.UserService;
 
 @Controller
+@RequestMapping("/")
 public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     public String showUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         return "index";
