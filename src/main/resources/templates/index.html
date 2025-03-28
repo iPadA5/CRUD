@@ -16,6 +16,22 @@
     <input type="email" id="email" name="email" required><br>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required><br>
+    <h3>Roles:</h3>
+    <label for="ROLE_USER">ROLE_USER</label>
+    <input type="checkbox" id="ROLE_USER" name="ROLE_USER" value="true"><br>
+    <label for="ROLE_ADMIN">ROLE_ADMIN</label>
+    <input type="checkbox" id="ROLE_ADMIN" name="ROLE_ADMIN" value="true"><br>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (event) {
+            const userCheckBox = document.querySelector('input[name="ROLE_USER"]').checked;
+            const adminCheckBox = document.querySelector('input[name="ROLE_ADMIN"]').checked;
+            if (!userCheckBox && !adminCheckBox) {
+                alert('Выберите хотя-бы одну роль');
+                event.preventDefault();
+            }
+        });
+    </script>
 
     <button type="submit">Add</button>
 </form>
@@ -27,6 +43,7 @@
         <th>LastName</th>
         <th>Email</th>
         <th>Password</th>
+        <th>Roles</th>
         <th>action</th>
     </tr>
     </thead>
@@ -37,6 +54,7 @@
         <td th:text="${user.getLastName()}">LastName</td>
         <td th:text="${user.getEmail()}">Email</td>
         <td th:text="${user.getPassword()}">Password</td>
+        <td th:text="${user.getAuthorities()}">Roles</td>
         <td>
             <form th:action="@{/admin/delete/{id}(id=${user.id})}" method="post">
                 <button type="submit">Delete</button>

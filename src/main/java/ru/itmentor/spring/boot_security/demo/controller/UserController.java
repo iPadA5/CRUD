@@ -8,13 +8,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.model.User;
+import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
+
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
 public class UserController {
+    private final UserService userService;
+
     @Autowired
-    UserService userService;
+    UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/admin/all-users")
     public String showUsers(Model model) {
@@ -29,12 +36,20 @@ public class UserController {
     }
 
     @PostMapping("/admin/add")
-    public String addUser(User user) {
-        userService.saveUser(user);
+    public String addUser(User user,
+                          @RequestParam(required = false) Boolean ROLE_ADMIN,
+                          @RequestParam(required = false) Boolean ROLE_USER) {
+
+        boolean adminIsChecked = ROLE_ADMIN != null && ROLE_ADMIN;
+        boolean userIsChecked = ROLE_USER != null && ROLE_USER;
+
+        userService.saveUser(user, adminIsChecked, userIsChecked);
         return "redirect:/admin/all-users";
     }
     @PostMapping("/admin/update")
-    public String updateUser(User user) {
+    public String updateUser(User user,
+                             @RequestParam(value = "roles[]", required = false) List<Role> roles) {
+        user.setRoles(roles);
         userService.updateUser(user);
         return "redirect:/admin/all-users";
     }
@@ -42,6 +57,8 @@ public class UserController {
     @GetMapping("/admin/edit/{id}")
     public String editUser(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
+        List<Role> roles = userService.getAllRoles();
+        model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         return "edit";
     }

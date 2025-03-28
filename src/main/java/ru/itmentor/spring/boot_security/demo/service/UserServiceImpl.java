@@ -1,44 +1,30 @@
 package ru.itmentor.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.itmentor.spring.boot_security.demo.dao.RoleDao;
+import ru.itmentor.spring.boot_security.demo.dao.RoleDaoImpl;
 import ru.itmentor.spring.boot_security.demo.dao.UserDaoImpl;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
-
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final UserDaoImpl  userDao;
+    private final RoleDaoImpl roleDaoImpl;
 
-    private UserDaoImpl userDao;
-    private PasswordEncoder passwordEncoder;
-    private RoleDao roleDao;
     @Autowired
-    UserServiceImpl(UserDaoImpl userDao, PasswordEncoder passwordEncoder, RoleDao roleDao) {
-        this.passwordEncoder = passwordEncoder;
+    UserServiceImpl(UserDaoImpl userDao, RoleDaoImpl roleDaoImpl) {
         this.userDao = userDao;
-        this.roleDao = roleDao;
+        this.roleDaoImpl = roleDaoImpl;
     }
 
     @Override
     @Transactional
-    public void saveUser(User user) {
-        if(user.getAuthorities() == null || user.getAuthorities().isEmpty()) {
-            Role defaultRole = roleDao.findByName("ROLE_USER").orElseThrow(() ->  new RuntimeException("No role found"));
-            Set<Role> roles = new HashSet<>();
-            roles.add(defaultRole);
-            user.setRoles(roles);
-        }
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        userDao.saveUser(user);
+    public void saveUser(User user, boolean adminIsChecked, boolean userIsChecked) {
+        userDao.saveUser(user, adminIsChecked, userIsChecked);
     }
 
     @Override
@@ -50,8 +36,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user) {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
         userDao.updateUser(user);
     }
 
@@ -77,5 +61,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleDaoImpl.getAllRoles();
+    }
+
+    @Override
+    public List<Role> findRoleById(List<Long> id) {
+        return roleDaoImpl.findById(id);
+    }
+
+    @Override
+    public Role findRoleByStringId(Long id) {
+        return roleDaoImpl.findById(id);
     }
 }

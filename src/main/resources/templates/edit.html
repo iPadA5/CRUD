@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Update User</h1>
-<form th:action="@{/update}" method="post" th:object="${user}">
+<form th:action="@{/admin/update}" method="post" th:object="${user}" onsubmit="return validateRoles()">
   <input type="hidden" th:field="*{id}" />
 
   <label for="firstName">Name:</label>
@@ -20,6 +20,28 @@
 
   <label for="password">Password:</label>
   <input type="password" id="password" th:field="*{password}">
+
+  <h3>Roles:</h3>
+  <div th:each="role : ${roles}">
+    <label th:text="${role.getName()}"></label>
+    <input type="checkbox"
+            th:id="${role.id}"
+            th:name="'roles[]'"
+            th:value="${role.id}"
+            th:checked="${user.roles != null and user.roles.contains(role)}"><br>
+    <script>
+      function validateRoles() {
+        const checkboxes = document.querySelectorAll('input[name="roles[]"]:checked');
+        const errorMessage = document.getElementById('error-message');
+        if (checkboxes.length === 0) {
+          alert("Выберите хотя-бы одну роль")
+          return false;
+        } else {
+          return true;
+        }
+      }
+    </script>
+  </div>
 
   <button type="submit">Save</button>
 

@@ -11,6 +11,7 @@
         <th>Name</th>
         <th>LastName</th>
         <th>Email</th>
+        <th>Roles</th>
         <th>Password</th>
     </tr>
     </thead>
@@ -20,6 +21,7 @@
         <td th:text="${user.getFirstName()}">Name</td>
         <td th:text="${user.getLastName()}">LastName</td>
         <td th:text="${user.getEmail()}">Email</td>
+        <td th:text="${user.getAuthorities()}">Roles</td>
         <td th:text="${user.getPassword()}">Password</td>
     </tr>
     </tbody>

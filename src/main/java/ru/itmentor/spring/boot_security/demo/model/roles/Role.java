@@ -3,8 +3,6 @@ package ru.itmentor.spring.boot_security.demo.model.roles;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Set;
-
 @Entity
 public class Role implements GrantedAuthority {
     @Id
@@ -24,5 +22,14 @@ public class Role implements GrantedAuthority {
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
