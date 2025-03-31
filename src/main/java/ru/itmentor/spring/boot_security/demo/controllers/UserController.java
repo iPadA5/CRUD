@@ -20,6 +20,10 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/")
+    public String index() {
+        return "redirect:/user";
+    }
     @GetMapping("/user")
     public String getCurrentUserDetails(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
