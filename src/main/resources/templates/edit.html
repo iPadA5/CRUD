@@ -32,7 +32,6 @@
     <script>
       function validateRoles() {
         const checkboxes = document.querySelectorAll('input[name="roles[]"]:checked');
-        const errorMessage = document.getElementById('error-message');
         if (checkboxes.length === 0) {
           alert("Выберите хотя-бы одну роль")
           return false;
