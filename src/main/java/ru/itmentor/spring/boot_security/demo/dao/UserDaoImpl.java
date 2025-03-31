@@ -1,9 +1,11 @@
 package ru.itmentor.spring.boot_security.demo.dao;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import ru.itmentor.spring.boot_security.demo.model.User;
@@ -52,7 +54,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-
     @Override
     public void deleteUserById(Long id) {
         User user = entityManager.find(User.class, id);
@@ -75,10 +76,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @EntityGraph(attributePaths = {"roles"})
     public User getUserByEmail(String email) {
         try {
-            TypedQuery<User> typedQuery;
-            typedQuery = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
+            TypedQuery<User> typedQuery = entityManager.createQuery(
+                    "SELECT u FROM User u WHERE u.email = :email", User.class);
             typedQuery.setParameter("email", email);
             return typedQuery.getSingleResult();
         } catch (Exception e){
