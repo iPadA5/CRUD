@@ -12,6 +12,8 @@ import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 public class RoleDaoImpl implements RoleDao {
@@ -35,19 +37,19 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
-    public List<Role> getAllRoles() {
+    public Set<Role> getAllRoles() {
         TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r", Role.class);
-        return  query.getResultList();
+        return  query.getResultStream().collect(Collectors.toSet());
     }
 
     @Override
-    public List<Role> findById(List<Long> roleIds) {
+    public Set<Role> findById(Set<Long> roleIds) {
         if (roleIds == null || roleIds.isEmpty()) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
         return entityManager.createQuery("SELECT r FROM Role r WHERE r.id IN :roleIds", Role.class)
                 .setParameter("roleIds", roleIds)
-                .getResultList();
+                .getResultStream().collect(Collectors.toSet());
     }
 
     @Override

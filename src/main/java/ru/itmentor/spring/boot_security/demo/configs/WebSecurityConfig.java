@@ -25,7 +25,7 @@ public class WebSecurityConfig {
     @Bean
     protected SecurityFilterChain securityFilterChain (HttpSecurity http, CustomUserDetailsService customUserDetailsService) throws Exception {
         return http
-                .authorizeHttpRequests(auth -> auth
+                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

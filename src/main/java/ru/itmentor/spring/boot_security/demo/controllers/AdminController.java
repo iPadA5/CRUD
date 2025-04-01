@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
-
-import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -52,7 +51,7 @@ public class AdminController {
 
     @PostMapping("/update")
     public String updateUser(User user,
-                             @RequestParam(value = "roles[]", required = false) List<Role> roles) {
+                             @RequestParam(value = "roles[]", required = false) Set<Role> roles) {
         user.setRoles(roles);
         userService.updateUser(user);
         return "redirect:/admin/all-users";
@@ -61,7 +60,7 @@ public class AdminController {
     @GetMapping("/edit/{id}")
     public String editUser(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
-        List<Role> roles = userService.getAllRoles();
+        Set<Role> roles = userService.getAllRoles();
         model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         return "edit";

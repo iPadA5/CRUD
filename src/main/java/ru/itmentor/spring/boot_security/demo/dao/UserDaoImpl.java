@@ -13,7 +13,9 @@ import ru.itmentor.spring.boot_security.demo.dao.interfaces.UserDao;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Repository
@@ -32,7 +34,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveUser(User user, boolean adminIsChecked, boolean userIsChecked) {
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         if (adminIsChecked) {
             roles.add(findRoleByName("ROLE_ADMIN"));
         }

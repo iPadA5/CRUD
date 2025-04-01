@@ -9,6 +9,7 @@ import ru.itmentor.spring.boot_security.demo.dao.UserDaoImpl;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -66,12 +67,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Role> getAllRoles() {
+    public Set<Role> getAllRoles() {
         return roleDaoImpl.getAllRoles();
     }
 
     @Override
-    public List<Role> findRoleById(List<Long> id) {
+    public Set<Role> findRoleById(Set<Long> id) {
         return roleDaoImpl.findById(id);
     }
 
