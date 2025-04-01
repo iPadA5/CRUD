@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.itmentor.spring.boot_security.demo.dao.interfaces.RoleDao;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import java.util.Collections;
 import java.util.List;

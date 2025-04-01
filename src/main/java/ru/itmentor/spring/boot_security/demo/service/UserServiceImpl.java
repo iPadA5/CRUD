@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void saveUser(User user, boolean adminIsChecked, boolean userIsChecked) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         userDao.saveUser(user, adminIsChecked, userIsChecked);
     }
 

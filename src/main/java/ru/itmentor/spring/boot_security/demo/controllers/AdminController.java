@@ -11,7 +11,7 @@ import ru.itmentor.spring.boot_security.demo.service.UserService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -21,19 +21,24 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/admin/all-users")
+    @GetMapping("/admin")
+    public String admin() {
+        return "redirect:/admin/all-users";
+    }
+
+    @GetMapping("/all-users")
     public String showUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         return "index";
     }
 
-    @PostMapping("/admin/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
         return "redirect:/admin/all-users";
     }
 
-    @PostMapping("/admin/add")
+    @PostMapping("/add")
     public String addUser(User user,
                           @RequestParam(required = false) Boolean ROLE_ADMIN,
                           @RequestParam(required = false) Boolean ROLE_USER) {
@@ -45,7 +50,7 @@ public class AdminController {
         return "redirect:/admin/all-users";
     }
 
-    @PostMapping("/admin/update")
+    @PostMapping("/update")
     public String updateUser(User user,
                              @RequestParam(value = "roles[]", required = false) List<Role> roles) {
         user.setRoles(roles);
@@ -53,7 +58,7 @@ public class AdminController {
         return "redirect:/admin/all-users";
     }
 
-    @GetMapping("/admin/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String editUser(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
         List<Role> roles = userService.getAllRoles();
@@ -62,9 +67,9 @@ public class AdminController {
         return "edit";
     }
 
-    @GetMapping("/admin/user/{email}")
-    public String getUserByEmail(@PathVariable String email, Model model) {
-        User user = userService.getUserByEmail(email);
+    @GetMapping("/user/{id}")
+    public String getUserByEmail(@PathVariable Long id, Model model) {
+        User user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "user";
     }

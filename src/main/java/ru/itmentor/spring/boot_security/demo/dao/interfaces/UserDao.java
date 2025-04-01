@@ -1,4 +1,4 @@
-package ru.itmentor.spring.boot_security.demo.dao;
+package ru.itmentor.spring.boot_security.demo.dao.interfaces;
 
 import ru.itmentor.spring.boot_security.demo.model.User;
 import java.util.List;
