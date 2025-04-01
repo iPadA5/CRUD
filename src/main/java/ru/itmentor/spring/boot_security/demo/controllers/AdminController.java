@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
+
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -22,7 +24,7 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String admin() {
-        return "redirect:/admin/all-users";
+        return "redirect:admin/all-users";
     }
 
     @GetMapping("/all-users")
@@ -31,7 +33,7 @@ public class AdminController {
         return "index";
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
         return "redirect:/admin/all-users";
@@ -49,7 +51,7 @@ public class AdminController {
         return "redirect:/admin/all-users";
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public String updateUser(User user,
                              @RequestParam(value = "roles[]", required = false) Set<Role> roles) {
         user.setRoles(roles);

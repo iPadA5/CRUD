@@ -57,6 +57,7 @@
         <td th:text="${user.getAuthorities()}">Roles</td>
         <td>
             <form th:action="@{/admin/delete/{id}(id=${user.id})}" method="post">
+                <input type="hidden" name="_method" value="delete">
                 <button type="submit">Delete</button>
             </form>
             <form th:action="@{/admin/edit/{id}(id=${user.id})}" method="get" style="display:inline;">

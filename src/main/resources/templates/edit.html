@@ -7,6 +7,7 @@
 <body>
 <h1>Update User</h1>
 <form th:action="@{/admin/update}" method="post" th:object="${user}" onsubmit="return validateRoles()">
+  <input type="hidden" name="_method" value="patch">
   <input type="hidden" th:field="*{id}" />
 
   <label for="firstName">Name:</label>
