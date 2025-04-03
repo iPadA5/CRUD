@@ -20,12 +20,12 @@ public class WebSecurityConfig {
     @Autowired
     public WebSecurityConfig(SuccessUserHandler successUserHandler) {
         this.successUserHandler = successUserHandler;
-
     }
 
     @Bean
     protected SecurityFilterChain securityFilterChain (HttpSecurity http, CustomUserDetailsService customUserDetailsService) throws Exception {
         return http
+                //.csrf(csrf -> csrf.disable())
                  .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")

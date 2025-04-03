@@ -6,9 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
-import ru.itmentor.spring.boot_security.demo.service.UserService;
+import ru.itmentor.spring.boot_security.demo.service.interfaces.UserService;
 
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -71,6 +70,9 @@ public class AdminController {
     @GetMapping("/user/{id}")
     public String getUserByEmail(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
+        if(user == null) {
+            return "userNotFound";
+        }
         model.addAttribute("user", user);
         return "user";
     }

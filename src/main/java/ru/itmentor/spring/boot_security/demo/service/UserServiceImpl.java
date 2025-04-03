@@ -8,6 +8,7 @@ import ru.itmentor.spring.boot_security.demo.dao.RoleDaoImpl;
 import ru.itmentor.spring.boot_security.demo.dao.UserDaoImpl;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
+import ru.itmentor.spring.boot_security.demo.service.interfaces.UserService;
 import java.util.List;
 import java.util.Set;
 

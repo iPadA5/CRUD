@@ -1,4 +1,4 @@
-package ru.itmentor.spring.boot_security.demo.service;
+package ru.itmentor.spring.boot_security.demo.service.interfaces;
 
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
