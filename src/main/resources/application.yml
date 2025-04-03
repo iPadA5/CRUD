@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: postgres
+    password: lobster99krab
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: Trace
+    org.springframework.transaction: DEBUG
