@@ -69,12 +69,16 @@ public class AdminRestController {
         }
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody User user,
-                             @RequestParam(value = "roles") Set<Role> roles) {
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<String> updateUser(
+            @PathVariable Long id,
+            @RequestBody User user,
+            @RequestParam(value = "roles") Set<Role> roles) {
         try{
-            user.setRoles(roles);
-            userService.updateUser(user);
+            User updatedUser = userService.getUserById(id);
+            updatedUser.copyUser(user);
+            updatedUser.setRoles(roles);
+            userService.updateUser(updatedUser);
             return ResponseEntity.status(HttpStatus.OK).body("User updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
