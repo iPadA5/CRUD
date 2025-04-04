@@ -48,12 +48,10 @@ public class AdminRestController {
 
     @PostMapping("/add")
     public ResponseEntity<String> createUser(@RequestBody User user,
-                             @RequestParam Boolean ROLE_ADMIN,
-                             @RequestParam Boolean ROLE_USER) {
-        boolean adminIsChecked = ROLE_ADMIN != null && ROLE_ADMIN;
-        boolean userIsChecked = ROLE_USER != null && ROLE_USER;
+                             @RequestParam(value = "roles") Set<Role> roles) {
         try {
-            userService.saveUser(user, adminIsChecked, userIsChecked);
+            user.setRoles(roles);
+            userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body("User added successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User could not be added");
@@ -73,7 +71,7 @@ public class AdminRestController {
 
     @PatchMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody User user,
-                             @RequestParam(value = "roles", required = false) Set<Role> roles) {
+                             @RequestParam(value = "roles") Set<Role> roles) {
         try{
             user.setRoles(roles);
             userService.updateUser(user);

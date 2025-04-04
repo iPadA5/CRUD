@@ -33,15 +33,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void saveUser(User user, boolean adminIsChecked, boolean userIsChecked) {
-        Set<Role> roles = new HashSet<>();
-        if (adminIsChecked) {
-            roles.add(findRoleByName("ROLE_ADMIN"));
-        }
-        if (userIsChecked) {
-            roles.add(findRoleByName("ROLE_USER"));
-        }
-        user.setRoles(roles);
+    public void saveUser(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         entityManager.persist(user);

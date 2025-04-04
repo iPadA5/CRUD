@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface UserService {
 
-    void saveUser(User user, boolean adminIsChecked, boolean userIsChecked);
+    void saveUser(User user);
 
     List<User> getAllUsers();
 

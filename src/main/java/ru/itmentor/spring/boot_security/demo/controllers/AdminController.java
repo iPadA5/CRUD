@@ -29,6 +29,7 @@ public class AdminController {
     @GetMapping("/all-users")
     public String showUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", userService.getAllRoles());
         return "index";
     }
 
@@ -40,19 +41,18 @@ public class AdminController {
 
     @PostMapping("/add")
     public String addUser(User user,
-                          @RequestParam(required = false) Boolean ROLE_ADMIN,
-                          @RequestParam(required = false) Boolean ROLE_USER) {
-
-        boolean adminIsChecked = ROLE_ADMIN != null && ROLE_ADMIN;
-        boolean userIsChecked = ROLE_USER != null && ROLE_USER;
-
-        userService.saveUser(user, adminIsChecked, userIsChecked);
-        return "redirect:/admin/all-users";
+                          @RequestParam(value = "roles", required = false) Set<Role> roles) {
+        if (roles != null && !roles.isEmpty()) {
+            user.setRoles(roles);
+            userService.saveUser(user);
+            return "redirect:/admin/all-users";
+        }
+        else return "redirect:/admin/all-users";
     }
 
     @PatchMapping("/update")
     public String updateUser(User user,
-                             @RequestParam(value = "roles[]", required = false) Set<Role> roles) {
+                             @RequestParam(value = "roles[]") Set<Role> roles) {
         user.setRoles(roles);
         userService.updateUser(user);
         return "redirect:/admin/all-users";
