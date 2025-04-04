@@ -2,11 +2,15 @@ package ru.itmentor.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.itmentor.spring.boot_security.demo.dto.UserDto;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import ru.itmentor.spring.boot_security.demo.service.interfaces.UserService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/rest")
@@ -19,13 +23,24 @@ public class AdminRestController {
     }
 
     @GetMapping("/all-users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserDto> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        List<UserDto> userDtos = users.stream()
+                .map(user -> {
+                    UserDto userDto = new UserDto();
+                    userDto.copyDataFromUser(user);
+                    return userDto;
+                })
+                .collect(Collectors.toList());
+        return userDtos;
     }
 
     @GetMapping("/user/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public UserDto getUser(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        UserDto userDto = new UserDto();
+        userDto.copyDataFromUser(user);
+        return userDto;
     }
 
     @PostMapping("/add")
