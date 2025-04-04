@@ -1,13 +1,13 @@
 package ru.itmentor.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.dto.UserDto;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import ru.itmentor.spring.boot_security.demo.service.interfaces.UserService;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class AdminRestController {
     }
 
     @GetMapping("/all-users")
-    public List<UserDto> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         List<UserDto> userDtos = users.stream()
                 .map(user -> {
@@ -32,50 +32,55 @@ public class AdminRestController {
                     return userDto;
                 })
                 .collect(Collectors.toList());
-        return userDtos;
+        return ResponseEntity.ok(userDtos);
     }
 
     @GetMapping("/user/{id}")
-    public UserDto getUser(@PathVariable Long id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        UserDto userDto = new UserDto();
-        userDto.copyDataFromUser(user);
-        return userDto;
+        if (user != null) {
+            UserDto userDto = new UserDto();
+            userDto.copyDataFromUser(user);
+            return ResponseEntity.ok(userDto);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PostMapping("/add")
-    public String createUser(@RequestBody User user,
+    public ResponseEntity<String> createUser(@RequestBody User user,
                              @RequestParam Boolean ROLE_ADMIN,
                              @RequestParam Boolean ROLE_USER) {
         boolean adminIsChecked = ROLE_ADMIN != null && ROLE_ADMIN;
         boolean userIsChecked = ROLE_USER != null && ROLE_USER;
         try {
             userService.saveUser(user, adminIsChecked, userIsChecked);
-            return "User created";
+            return ResponseEntity.status(HttpStatus.CREATED).body("User added successfully");
         } catch (Exception e) {
-            return "User creation failed";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User could not be added");
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try{
             userService.deleteUserById(id);
-            return "User deleted";
+            return ResponseEntity.status(HttpStatus.OK).body("User deleted");
         } catch (Exception e) {
-            return "User deletion failed";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User could not be deleted");
         }
     }
 
     @PatchMapping("/update")
-    public String updateUser(@RequestBody User user,
+    public ResponseEntity<String> updateUser(@RequestBody User user,
                              @RequestParam(value = "roles", required = false) Set<Role> roles) {
         try{
             user.setRoles(roles);
             userService.updateUser(user);
-            return "User updated";
+            return ResponseEntity.status(HttpStatus.OK).body("User updated successfully");
         } catch (Exception e) {
-            return "User update failed";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("User could not be updated");
         }
     }
 }

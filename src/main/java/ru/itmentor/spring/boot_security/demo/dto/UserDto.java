@@ -7,10 +7,10 @@ import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import java.util.Set;
 
 public class UserDto {
-    private String password;
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private Set<Role> roles;
 
     public void copyDataFromUser(User user){
