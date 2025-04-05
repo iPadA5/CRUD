@@ -40,22 +40,21 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public String addUser(User user,
-                          @RequestParam(value = "roles", required = false) Set<Role> roles) {
-        if (roles != null && !roles.isEmpty()) {
-            user.setRoles(roles);
+    public String addUser(User user) {
+        if (!user.getAuthorities().isEmpty()) {
             userService.saveUser(user);
             return "redirect:/admin/all-users";
         }
-        else return "redirect:/admin/all-users";
+        throw new RuntimeException("Users roles are empty");
     }
 
     @PatchMapping("/update")
-    public String updateUser(User user,
-                             @RequestParam(value = "roles[]") Set<Role> roles) {
-        user.setRoles(roles);
-        userService.updateUser(user);
-        return "redirect:/admin/all-users";
+    public String updateUser(User user) {
+        if (!user.getAuthorities().isEmpty()) {
+            userService.updateUser(user);
+            return "redirect:/admin/all-users";
+        }
+       else return "userWithoutRoles";
     }
 
     @GetMapping("/edit/{id}")
@@ -68,11 +67,8 @@ public class AdminController {
     }
 
     @GetMapping("/user/{id}")
-    public String getUserByEmail(@PathVariable Long id, Model model) {
+    public String getUserById(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
-        if(user == null) {
-            return "userNotFound";
-        }
         model.addAttribute("user", user);
         return "user";
     }

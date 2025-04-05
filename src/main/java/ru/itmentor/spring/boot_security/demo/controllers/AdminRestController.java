@@ -6,10 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.dto.UserDto;
 import ru.itmentor.spring.boot_security.demo.model.User;
-import ru.itmentor.spring.boot_security.demo.model.roles.Role;
 import ru.itmentor.spring.boot_security.demo.service.interfaces.UserService;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,24 +36,17 @@ public class AdminRestController {
     @GetMapping("/user/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        if (user != null) {
-            UserDto userDto = new UserDto();
-            userDto.copyDataFromUser(user);
-            return ResponseEntity.ok(userDto);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        UserDto userDto = new UserDto();
+        userDto.copyDataFromUser(user);
+        return ResponseEntity.ok(userDto);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> createUser(@RequestBody User user,
-                             @RequestParam(value = "roles") Set<Role> roles) {
-        try {
-            user.setRoles(roles);
-            userService.saveUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body("User added successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User could not be added");
-        }
+    public ResponseEntity<String> createUser(@RequestBody User user) {
+        userService.saveUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("User added successfully");
+
     }
 
     @DeleteMapping("/delete/{id}")
@@ -69,20 +60,12 @@ public class AdminRestController {
         }
     }
 
-    @PatchMapping("/update/{id}")
-    public ResponseEntity<String> updateUser(
-            @PathVariable Long id,
-            @RequestBody User user,
-            @RequestParam(value = "roles") Set<Role> roles) {
-        try{
-            User updatedUser = userService.getUserById(id);
-            updatedUser.copyUser(user);
-            updatedUser.setRoles(roles);
-            userService.updateUser(updatedUser);
-            return ResponseEntity.status(HttpStatus.OK).body("User updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("User could not be updated");
-        }
+    @PatchMapping("/update")
+    public ResponseEntity<String> updateUser(@RequestBody User user) {
+        User updatedUser = userService.getUserById(user.getId());
+        updatedUser.copyUser(user);
+        userService.updateUser(updatedUser);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("User updated successfully");
     }
 }

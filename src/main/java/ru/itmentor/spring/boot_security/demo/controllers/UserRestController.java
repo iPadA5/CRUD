@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.itmentor.spring.boot_security.demo.dto.UserDto;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.interfaces.UserService;
 
@@ -20,11 +21,13 @@ public class UserRestController {
     }
 
     @GetMapping("/currentUser")
-    public User getCurrentUser() {
+    public UserDto getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = auth.getPrincipal();
         if (principal instanceof User) {
-            return userService.getUserByEmail(((User) principal).getEmail());
+            UserDto userDto = new UserDto();
+            userDto.copyDataFromUser((User) principal);
+            return userDto;
         }
         return null;
     }
