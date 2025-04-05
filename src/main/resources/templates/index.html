@@ -7,7 +7,17 @@
 <body>
 <h1>Users Table</h1>
 <h2>Users</h2>
-<form th:action="@{/admin/add}" method="post">
+<form th:action="@{/admin/add}" method="post" onsubmit="validateForm()">
+    <script>
+        function validateForm() {
+            const checkboxes = document.querySelectorAll('input[name="roles"]:checked');
+            if (checkboxes.length === 0) {
+                alert("Please select at least one role.");
+                return false; // Предотвращаем отправку формы
+            }
+            return true; // Разрешаем отправку формы
+        }
+    </script>
     <label for="firstName">Name:</label>
     <input type="text" id="firstName" name="firstName" required><br>
     <label for="lastName">LastName</label>
@@ -17,24 +27,15 @@
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required><br>
     <h3>Roles:</h3>
-    <label for="ROLE_USER">ROLE_USER</label>
-    <input type="checkbox" id="ROLE_USER" name="ROLE_USER" value="true"><br>
-    <label for="ROLE_ADMIN">ROLE_ADMIN</label>
-    <input type="checkbox" id="ROLE_ADMIN" name="ROLE_ADMIN" value="true"><br>
-
-    <script>
-        document.querySelector('form').addEventListener('submit', function (event) {
-            const userCheckBox = document.querySelector('input[name="ROLE_USER"]').checked;
-            const adminCheckBox = document.querySelector('input[name="ROLE_ADMIN"]').checked;
-            if (!userCheckBox && !adminCheckBox) {
-                alert('Выберите хотя-бы одну роль');
-                event.preventDefault();
-            }
-        });
-    </script>
-
+    <div th:each="role : ${roles}">
+        <label>
+            <input type="checkbox" name="roles" th:value="${role.id}">
+            <span th:text="${role.name}"></span>
+        </label><br>
+    </div>
     <button type="submit">Add</button>
-</form>
+
+ </form>
 <table border="1">
     <thead>
     <tr>

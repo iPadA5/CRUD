@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface UserDao {
 
-    void saveUser(User user, boolean adminIsChecked, boolean userIsChecked);
+    void saveUser(User user);
 
     List<User> getAllUsers();
 

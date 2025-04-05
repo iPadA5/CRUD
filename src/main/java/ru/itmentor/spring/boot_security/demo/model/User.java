@@ -118,6 +118,14 @@ public class User implements UserDetails {
         this.id = id;
     }
 
+    public void copyUser(User user) {
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.roles = user.getRoles();
+    }
+
     @Override
     public String toString() {
         return "User: firstName = " + firstName + ", lastName = " + lastName

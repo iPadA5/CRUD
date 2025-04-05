@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
-import ru.itmentor.spring.boot_security.demo.service.UserService;
+import ru.itmentor.spring.boot_security.demo.service.interfaces.UserService;
 
 @Component
 public class StringToRoleConverter implements Converter<String, Role> {

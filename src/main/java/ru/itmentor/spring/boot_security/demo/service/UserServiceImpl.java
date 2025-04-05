@@ -8,6 +8,7 @@ import ru.itmentor.spring.boot_security.demo.dao.RoleDaoImpl;
 import ru.itmentor.spring.boot_security.demo.dao.UserDaoImpl;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
+import ru.itmentor.spring.boot_security.demo.service.interfaces.UserService;
 import java.util.List;
 import java.util.Set;
 
@@ -27,9 +28,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(User user, boolean adminIsChecked, boolean userIsChecked) {
-
-        userDao.saveUser(user, adminIsChecked, userIsChecked);
+    public void saveUser(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        userDao.saveUser(user);
     }
 
     @Override

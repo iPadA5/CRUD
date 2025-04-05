@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.itmentor.spring.boot_security.demo.dao.interfaces.UserDao;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Repository
@@ -23,27 +20,15 @@ public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
     EntityManager entityManager;
-    private PasswordEncoder passwordEncoder;
     private RoleDaoImpl roleDaoImpl;
 
     @Autowired
-    UserDaoImpl(PasswordEncoder passwordEncoder, RoleDaoImpl roleDaoImpl) {
-        this.passwordEncoder = passwordEncoder;
+    UserDaoImpl(RoleDaoImpl roleDaoImpl) {
         this.roleDaoImpl = roleDaoImpl;
     }
 
     @Override
-    public void saveUser(User user, boolean adminIsChecked, boolean userIsChecked) {
-        Set<Role> roles = new HashSet<>();
-        if (adminIsChecked) {
-            roles.add(findRoleByName("ROLE_ADMIN"));
-        }
-        if (userIsChecked) {
-            roles.add(findRoleByName("ROLE_USER"));
-        }
-        user.setRoles(roles);
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
+    public void saveUser(User user) {
         entityManager.persist(user);
     }
 

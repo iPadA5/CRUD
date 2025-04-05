@@ -1,4 +1,4 @@
-package ru.itmentor.spring.boot_security.demo.service;
+package ru.itmentor.spring.boot_security.demo.service.interfaces;
 
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.model.roles.Role;
@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface UserService {
 
-    void saveUser(User user, boolean adminIsChecked, boolean userIsChecked);
+    void saveUser(User user);
 
     List<User> getAllUsers();
 
